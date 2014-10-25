@@ -21,7 +21,7 @@ to: bitemporal@ervacon.com.
 # Release info
 
 Java 5 (JDK 1.5) or later is required to build and use the code in this project. Joda Time
-(http://joda-time.sourceforge.net/) is used internally, and is the only external dependency.
+(http://www.joda.org/joda-time/) is used internally, and is the only external dependency.
 
 The project is packaged as a simple Maven 2 project (http://maven.apache.org/). Simply executing 'mvn package'
 in the project directory will build the project and package it as a jar file.
