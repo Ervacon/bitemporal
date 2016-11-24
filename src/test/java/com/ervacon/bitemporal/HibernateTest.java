@@ -4,26 +4,29 @@
  */
 package com.ervacon.bitemporal;
 
-import junit.framework.TestCase;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-public class HibernateTest extends TestCase {
+public class HibernateTest {
 
 	private SessionFactory sessionFactory;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		sessionFactory = new Configuration().configure().buildSessionFactory();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		sessionFactory.close();
 		TimeUtils.clearReference();
 	}
 
+	@Test
 	public void testPersistence() {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();

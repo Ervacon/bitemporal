@@ -4,15 +4,20 @@
  */
 package com.ervacon.bitemporal;
 
-import junit.framework.TestCase;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
 
-public class MiscTest extends TestCase {
+import org.junit.After;
+import org.junit.Test;
 
-	@Override
-	protected void tearDown() throws Exception {
+public class MiscTest {
+
+	@After
+	public void tearDown() throws Exception {
 		TimeUtils.clearReference();
 	}
 
+	@Test
 	public void testAbuttingIntervals() {
 		Person person = new Person("John Doe");
 
@@ -27,6 +32,7 @@ public class MiscTest extends TestCase {
 		assertEquals(2, person.address().getTrace().getData().size());
 	}
 
+	@Test
 	public void testOverlapAtTheEnd() {
 		Person person = new Person("John Doe");
 
@@ -41,6 +47,7 @@ public class MiscTest extends TestCase {
 		assertEquals(3, person.address().getTrace().getData().size());
 	}
 
+	@Test
 	public void testVisionFromTheFuture() {
 		Person person = new Person("John Doe");
 

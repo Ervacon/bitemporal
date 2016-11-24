@@ -6,16 +6,20 @@ package com.ervacon.bitemporal;
 
 import static com.ervacon.bitemporal.TimeUtils.day;
 import static com.ervacon.bitemporal.TimeUtils.from;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Test;
 
-public class ApiUsageTest extends TestCase {
+public class ApiUsageTest {
 
-	@Override
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		TimeUtils.clearReference();
 	}
 
+	@Test
 	public void testNonTemporalApiUsage() {
 		Person pete = new Person("Pete");
 		pete.address().set(new Address("Foostreet", "Bartown", "USA"));
@@ -23,6 +27,7 @@ public class ApiUsageTest extends TestCase {
 		assertEquals("Foostreet", pete.address().now().getLine1());
 	}
 
+	@Test
 	public void testTemporalApiUsage() {
 		Person pete = new Person("Pete");
 		pete.address().set(

@@ -4,12 +4,17 @@
  */
 package com.ervacon.bitemporal;
 
-import junit.framework.TestCase;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 
-public class ScenarioTest extends TestCase {
+import org.junit.After;
+import org.junit.Test;
 
-	@Override
-	protected void tearDown() throws Exception {
+public class ScenarioTest {
+
+	@After
+	public void tearDown() throws Exception {
 		TimeUtils.clearReference();
 	}
 
@@ -17,6 +22,7 @@ public class ScenarioTest extends TestCase {
 	 * The example scenarion described on Wikipedia:
 	 * http://en.wikipedia.org/wiki/Temporal_database
 	 */
+	@Test
 	public void testScenario() {
 		// 3/4/1975 John Doe is born
 		// nothing happens
