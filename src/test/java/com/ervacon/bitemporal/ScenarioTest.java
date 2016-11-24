@@ -1,8 +1,7 @@
 /*
- * (c) Copyright Ervacon 2007.
+ * (c) Copyright Ervacon 2016.
  * All Rights Reserved.
  */
-
 package com.ervacon.bitemporal;
 
 import junit.framework.TestCase;
@@ -34,7 +33,6 @@ public class ScenarioTest extends TestCase {
 
 		// 26/8/1994 John moves to Bigtown, but forgets to register
 		// nothing happens
-
 		// 27/12/1994 John registers his move
 		TimeUtils.setReference(TimeUtils.day(27, 12, 1994));
 		johnDoe.address().set(
@@ -44,8 +42,6 @@ public class ScenarioTest extends TestCase {
 		// 1/4/2001 John is killed in an accident, reported by the coroner that same day
 		TimeUtils.setReference(TimeUtils.day(1, 4, 2001));
 		johnDoe.alive().set(false);
-
-
 
 		// tests
 		TimeUtils.setReference(TimeUtils.day(1, 1, 2007));

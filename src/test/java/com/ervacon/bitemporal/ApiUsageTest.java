@@ -1,11 +1,11 @@
 /*
- * (c) Copyright Ervacon 2007.
+ * (c) Copyright Ervacon 2016.
  * All Rights Reserved.
  */
-
 package com.ervacon.bitemporal;
 
-import static com.ervacon.bitemporal.TimeUtils.*;
+import static com.ervacon.bitemporal.TimeUtils.day;
+import static com.ervacon.bitemporal.TimeUtils.from;
 
 import junit.framework.TestCase;
 

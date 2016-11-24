@@ -1,11 +1,10 @@
 /*
- * (c) Copyright Ervacon 2007.
+ * (c) Copyright Ervacon 2016.
  * All Rights Reserved.
  */
-
 package com.ervacon.bitemporal;
 
-import org.joda.time.Interval;
+import org.threeten.extra.Interval;
 
 /**
  * A bitemporal object. A bitemporal object is essentially a value tracked in two time dimensions:
@@ -19,9 +18,9 @@ import org.joda.time.Interval;
  * <p>
  * In most cases, application level could should not directly implement this interface, but should instead
  * wrap existing value classes bitemporally using a {@link BitemporalWrapper}.
- * 
+ *
  * @see BitemporalTrace
- * 
+ *
  * @author Erwin Vervaet
  * @author Christophe Vanfleteren
  */

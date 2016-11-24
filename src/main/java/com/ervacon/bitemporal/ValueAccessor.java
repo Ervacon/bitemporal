@@ -1,19 +1,17 @@
 /*
- * (c) Copyright Ervacon 2007.
+ * (c) Copyright Ervacon 2016.
  * All Rights Reserved.
  */
-
 package com.ervacon.bitemporal;
 
 import java.io.Serializable;
-
-import org.joda.time.Interval;
+import org.threeten.extra.Interval;
 
 /**
  * Simple strategy to access a value in a {@link Bitemporal} object.
- * 
+ *
  * @see BitemporalProperty
- * 
+ *
  * @author Erwin Vervaet
  * @author Christophe Vanfleteren
  */

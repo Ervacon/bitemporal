@@ -1,8 +1,7 @@
 /*
- * (c) Copyright Ervacon 2007.
+ * (c) Copyright Ervacon 2016.
  * All Rights Reserved.
  */
-
 package com.ervacon.bitemporal;
 
 import java.io.Serializable;
@@ -13,8 +12,8 @@ public class Person implements Serializable {
 
 	private Long id;
 	private String name;
-	private Collection<BitemporalWrapper<Address>> address = new LinkedList<BitemporalWrapper<Address>>();
-	private Collection<BitemporalWrapper<Boolean>> alive = new LinkedList<BitemporalWrapper<Boolean>>();
+	private Collection<BitemporalWrapper<Address>> address = new LinkedList<>();
+	private Collection<BitemporalWrapper<Boolean>> alive = new LinkedList<>();
 
 	/**
 	 * For Hibernate.
@@ -39,11 +38,11 @@ public class Person implements Serializable {
 	}
 
 	public WrappedBitemporalProperty<Address> address() {
-		return new WrappedBitemporalProperty<Address>(address);
+		return new WrappedBitemporalProperty<>(address);
 	}
 
 	public WrappedBitemporalProperty<Boolean> alive() {
-		return new WrappedBitemporalProperty<Boolean>(alive);
+		return new WrappedBitemporalProperty<>(alive);
 	}
 
 	@Override

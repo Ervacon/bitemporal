@@ -1,8 +1,7 @@
 /*
- * (c) Copyright Ervacon 2007.
+ * (c) Copyright Ervacon 2016.
  * All Rights Reserved.
  */
-
 package com.ervacon.bitemporal;
 
 import java.io.Serializable;
@@ -45,10 +44,9 @@ public class Address implements Serializable {
 		}
 		if (obj instanceof Address) {
 			Address other = (Address) obj;
-			return
-				other.line1.equals(this.line1) &&
-				other.line2.equals(this.line2) &&
-				other.line3.equals(this.line3);
+			return other.line1.equals(this.line1)
+					&& other.line2.equals(this.line2)
+					&& other.line3.equals(this.line3);
 		}
 		return false;
 	}

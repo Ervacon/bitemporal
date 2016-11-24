@@ -31,11 +31,11 @@
 			<property name="line3"/>
 		</component>
 		
-		<property name="validityInterval" type="org.joda.time.contrib.hibernate.PersistentInterval">
+		<property name="validityInterval" type="com.ervacon.bitemporal.support.PersistentInterval">
 			<column name="validityStart"/>
 			<column name="validityEnd"/>
 		</property>
-		<property name="recordInterval" type="org.joda.time.contrib.hibernate.PersistentInterval">
+		<property name="recordInterval" type="com.ervacon.bitemporal.support.PersistentInterval">
 			<column name="recordStart"/>
 			<column name="recordEnd"/>
 		</property>
@@ -48,11 +48,11 @@
 		
 		<property name="value" type="boolean"/>
 
-		<property name="validityInterval" type="org.joda.time.contrib.hibernate.PersistentInterval">
+		<property name="validityInterval" type="com.ervacon.bitemporal.support.PersistentInterval">
 			<column name="validityStart"/>
 			<column name="validityEnd"/>
 		</property>
-		<property name="recordInterval" type="org.joda.time.contrib.hibernate.PersistentInterval">
+		<property name="recordInterval" type="com.ervacon.bitemporal.support.PersistentInterval">
 			<column name="recordStart"/>
 			<column name="recordEnd"/>
 		</property>

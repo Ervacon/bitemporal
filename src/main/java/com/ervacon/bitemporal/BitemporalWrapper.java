@@ -1,13 +1,11 @@
 /*
- * (c) Copyright Ervacon 2007.
+ * (c) Copyright Ervacon 2016.
  * All Rights Reserved.
  */
-
 package com.ervacon.bitemporal;
 
 import java.io.Serializable;
-
-import org.joda.time.Interval;
+import org.threeten.extra.Interval;
 
 /**
  * Decorates a value with bitemporal information, making it possible to bitemporally track the value in a
@@ -21,7 +19,7 @@ import org.joda.time.Interval;
  * Instances of this class are serializable if the wrapped value is serializable.
  * <p>
  * Objects of this class are not thread-safe.
- * 
+ *
  * @author Erwin Vervaet
  * @author Christophe Vanfleteren
  */
@@ -70,21 +68,25 @@ public class BitemporalWrapper<V> implements Bitemporal, Serializable {
 		return value;
 	}
 
+	@Override
 	public Interval getValidityInterval() {
 		return validityInterval;
 	}
 
+	@Override
 	public Interval getRecordInterval() {
 		return recordInterval;
 	}
 
+	@Override
 	public void end() {
 		this.recordInterval = TimeUtils.interval(getRecordInterval().getStart(), TimeUtils.now());
 	}
 
+	@Override
 	public Bitemporal copyWith(Interval validityInterval) {
 		// force record interval to be 'from now'
-		return new BitemporalWrapper<V>(getValue(), validityInterval);
+		return new BitemporalWrapper<>(getValue(), validityInterval);
 	}
 
 	@Override

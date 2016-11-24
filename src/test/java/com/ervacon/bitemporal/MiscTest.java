@@ -1,8 +1,7 @@
 /*
- * (c) Copyright Ervacon 2007.
+ * (c) Copyright Ervacon 2016.
  * All Rights Reserved.
  */
-
 package com.ervacon.bitemporal;
 
 import junit.framework.TestCase;
@@ -27,7 +26,7 @@ public class MiscTest extends TestCase {
 
 		assertEquals(2, person.address().getTrace().getData().size());
 	}
-	
+
 	public void testOverlapAtTheEnd() {
 		Person person = new Person("John Doe");
 
@@ -41,7 +40,7 @@ public class MiscTest extends TestCase {
 		System.out.println(person.address().getTrace());
 		assertEquals(3, person.address().getTrace().getData().size());
 	}
-	
+
 	public void testVisionFromTheFuture() {
 		Person person = new Person("John Doe");
 
@@ -54,8 +53,7 @@ public class MiscTest extends TestCase {
 			person.address().set(new Address("X", "Y", "Z"),
 					TimeUtils.interval(TimeUtils.day(1, 1, 2000), TimeUtils.day(1, 2, 2000)));
 			fail();
-		}
-		catch (IllegalStateException e) {
+		} catch (IllegalStateException e) {
 			// expected
 		}
 	}
