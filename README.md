@@ -41,5 +41,5 @@ and provide a general introduction to dealing with temporal issues in rich domai
 tests also demonstrate usage of the code.
 
 If you want to learn more about temporal databases and related topics, start here:
-http://en.wikipedia.org/wiki/Temporal_database
-http://www.martinfowler.com/eaaDev/timeNarrative.html
+* http://en.wikipedia.org/wiki/Temporal_database
+* http://www.martinfowler.com/eaaDev/timeNarrative.html
