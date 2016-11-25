@@ -4,6 +4,8 @@
  */
 package com.ervacon.bitemporal;
 
+import static com.ervacon.bitemporal.TimeUtils.fromNow;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collection;
@@ -14,7 +16,7 @@ import org.threeten.extra.Interval;
  * Represents a bitemporally tracked property of a class (for instance the name of a person).
  * <p>
  * The {@link BitemporalProperty} class provides a high-level API expressed in terms of actual value classes
- * (e.g. String), layered on top of low-level contructs such as a {@link BitemporalTrace} and {@link Bitemporal} objects.
+ * (e.g. String), layered on top of low-level constructs such as a {@link BitemporalTrace} and {@link Bitemporal} objects.
  * To be able to provide an API at the level of actual value classes, the {@link BitemporalProperty} uses
  * a {@link ValueAccessor} to extract actual values from {@link Bitemporal} objects.
  *
@@ -28,7 +30,7 @@ public class BitemporalProperty<V, T extends Bitemporal> implements Serializable
 	private ValueAccessor<V, T> accessor;
 
 	/**
-	 * Create a new bitemporal property setting up a trace using given data, and using given value accessor.
+	 * Create a new bitemporal property setting up a trace using given data and using given value accessor.
 	 */
 	public BitemporalProperty(Collection<? extends Bitemporal> data, ValueAccessor<V, T> accessor) {
 		this(new BitemporalTrace((Collection<Bitemporal>) data), accessor);
@@ -63,14 +65,14 @@ public class BitemporalProperty<V, T extends Bitemporal> implements Serializable
 	}
 
 	/**
-	 * Returns the value valid on specified date as currently known.
+	 * Returns the value valid on specified instant as currently known.
 	 */
 	public V on(Instant validOn) {
 		return accessor.extractValue(get(validOn));
 	}
 
 	/**
-	 * Returns the value valid on specified date as known on given date.
+	 * Returns the value valid on specified instant as known on given instant.
 	 */
 	public V on(Instant validOn, Instant knownOn) {
 		return accessor.extractValue(get(validOn, knownOn));
@@ -84,14 +86,14 @@ public class BitemporalProperty<V, T extends Bitemporal> implements Serializable
 	}
 
 	/**
-	 * Returns the bitemporal valid on specified date as currently known.
+	 * Returns the bitemporal valid on specified instant as currently known.
 	 */
 	public T get(Instant validOn) {
 		return get(validOn, TimeUtils.now());
 	}
 
 	/**
-	 * Returns the bitemporal valid on specified date as known on given date.
+	 * Returns the bitemporal valid on specified instant as known on given instant.
 	 */
 	public T get(Instant validOn, Instant knownOn) {
 		Collection<T> coll = (Collection<T>) trace.get(validOn, knownOn);
@@ -112,8 +114,8 @@ public class BitemporalProperty<V, T extends Bitemporal> implements Serializable
 	}
 
 	/**
-	 * Returns the history of the value as known on given date.
-	 * This informs you about how the valid value changed, as known on given date.
+	 * Returns the history of the value as known on given instant.
+	 * This informs you about how the valid value changed, as known on given instant.
 	 */
 	public List<T> getHistory(Instant knownOn) {
 		return (List<T>) trace.getHistory(knownOn);
@@ -128,8 +130,8 @@ public class BitemporalProperty<V, T extends Bitemporal> implements Serializable
 	}
 
 	/**
-	 * Returns the evolution of the value valid on given date.
-	 * This informs you about how our knowledge about the value valid on given date evolved.
+	 * Returns the evolution of the value valid on given instant.
+	 * This informs you about how our knowledge about the value valid on given instant evolved.
 	 */
 	public List<T> getEvolution(Instant validOn) {
 		return (List<T>) trace.getEvolution(validOn);
@@ -139,7 +141,7 @@ public class BitemporalProperty<V, T extends Bitemporal> implements Serializable
 	 * Set the value of this bitemporal property. The new value will be valid {@link TimeUtils#fromNow() from now on}.
 	 */
 	public void set(V value) {
-		set(value, TimeUtils.fromNow());
+		set(value, fromNow());
 	}
 
 	/**
@@ -157,7 +159,7 @@ public class BitemporalProperty<V, T extends Bitemporal> implements Serializable
 	}
 
 	/**
-	 * <i>Forget</i> the valid valid on given date.
+	 * <i>Forget</i> the value valid on given instant.
 	 */
 	public void end(Instant validOn) {
 		trace.get(validOn, TimeUtils.now()).forEach(bt -> bt.end());
@@ -171,14 +173,14 @@ public class BitemporalProperty<V, T extends Bitemporal> implements Serializable
 	}
 
 	/**
-	 * Returns whether or not this property has a value valid on given date.
+	 * Returns whether or not this property has a value valid on given instant.
 	 */
 	public boolean hasValueOn(Instant validOn) {
 		return hasValueOn(validOn, TimeUtils.now());
 	}
 
 	/**
-	 * Returns whether or not this property had a value valid on given date as known on specified date.
+	 * Returns whether or not this property had a value valid on given instant as known on specified instant.
 	 */
 	public boolean hasValueOn(Instant validOn, Instant knownOn) {
 		return !trace.get(validOn, knownOn).isEmpty();

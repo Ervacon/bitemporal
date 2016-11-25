@@ -18,6 +18,14 @@ import org.threeten.extra.Interval;
  */
 public final class TimeUtils {
 
+	/**
+	 * Instant representing the end of time.
+	 * <p>
+	 * Note that this does not use {@link Instant#MAX} because that causes issues when converting to and from
+	 * {@link Date}s. Furthermore, some databases put extra limits on the maximum timestamp that can be stored.
+	 */
+	public static final Instant END_OF_TIME = Instant.ofEpochMilli(32503676400000L); // 1/1/3000; adapt for your needs
+
 	// no need to instantiate this class
 	private TimeUtils() {
 	}
@@ -54,11 +62,8 @@ public final class TimeUtils {
 		REFERENCE.remove();
 	}
 
-	// general purpose date/time related utilities
-	private static final long END_OF_TIME = 32503676400000L; // 1/1/3000; adapt for your needs
-
 	/**
-	 * Create a {@link DateTime} object representing given day of given month in given year.
+	 * Create a {@link Instant} object representing given day of given month in given year.
 	 */
 	public static Instant day(int day, int month, int year) {
 		return ZonedDateTime.of(year, month, day, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant();
@@ -70,13 +75,6 @@ public final class TimeUtils {
 	 */
 	public static Instant now() {
 		return reference();
-	}
-
-	/**
-	 * Returns a {@link DateTime} object representing the end of time.
-	 */
-	public static Instant endOfTime() {
-		return Instant.ofEpochMilli(END_OF_TIME);
 	}
 
 	/**
@@ -93,7 +91,7 @@ public final class TimeUtils {
 	 * @see #endOfTime()
 	 */
 	public static Interval from(Instant start) {
-		return interval(start, endOfTime());
+		return interval(start, END_OF_TIME);
 	}
 
 	/**

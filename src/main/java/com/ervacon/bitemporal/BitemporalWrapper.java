@@ -4,6 +4,10 @@
  */
 package com.ervacon.bitemporal;
 
+import static com.ervacon.bitemporal.TimeUtils.fromNow;
+import static com.ervacon.bitemporal.TimeUtils.interval;
+import static com.ervacon.bitemporal.TimeUtils.now;
+
 import java.io.Serializable;
 import org.threeten.extra.Interval;
 
@@ -48,7 +52,7 @@ public class BitemporalWrapper<V> implements Bitemporal, Serializable {
 			throw new IllegalArgumentException("The validity interval is required");
 		}
 		this.validityInterval = validityInterval;
-		this.recordInterval = TimeUtils.fromNow();
+		this.recordInterval = fromNow();
 		this.value = value;
 	}
 
@@ -80,7 +84,7 @@ public class BitemporalWrapper<V> implements Bitemporal, Serializable {
 
 	@Override
 	public void end() {
-		this.recordInterval = TimeUtils.interval(getRecordInterval().getStart(), TimeUtils.now());
+		this.recordInterval = interval(getRecordInterval().getStart(), now());
 	}
 
 	@Override

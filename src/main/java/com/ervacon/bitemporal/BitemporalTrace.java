@@ -4,17 +4,19 @@
  */
 package com.ervacon.bitemporal;
 
-import static com.ervacon.bitemporal.TimeUtils.endOfTime;
+import static com.ervacon.bitemporal.TimeUtils.END_OF_TIME;
+import static com.ervacon.bitemporal.TimeUtils.interval;
+import static com.ervacon.bitemporal.TimeUtils.now;
 import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
-import org.threeten.extra.Interval;
+import java.util.List;
 
 /**
  * A trace of {@link Bitemporal} objects, bitemporally tracking some value (for instance a person's name).
@@ -53,9 +55,9 @@ public class BitemporalTrace implements Serializable {
 	}
 
 	/**
-	 * Returns the {@link Bitemporal} objects valid on given date as known on specified date.
+	 * Returns the {@link Bitemporal} objects valid on given instant as known on specified instant.
 	 */
-	public Collection<Bitemporal> get(Instant validOn, Instant knownOn) {
+	public List<Bitemporal> get(Instant validOn, Instant knownOn) {
 		return data.stream()
 				.filter(bt -> bt.getValidityInterval().contains(validOn) && bt.getRecordInterval().contains(knownOn))
 				.collect(toCollection(LinkedList::new));
@@ -65,17 +67,17 @@ public class BitemporalTrace implements Serializable {
 	 * Returns the history of the tracked value, as known on specified time.
 	 * The history informs you about how the valid value changed over time.
 	 */
-	public Collection<Bitemporal> getHistory(Instant knownOn) {
+	public List<Bitemporal> getHistory(Instant knownOn) {
 		return data.stream()
 				.filter(bt -> bt.getRecordInterval().contains(knownOn))
 				.collect(toCollection(LinkedList::new));
 	}
 
 	/**
-	 * Returns the evolution of the tracked value for a specified validity date.
-	 * The evolution informs you about how knowledge about the value valid at a certain date evolved.
+	 * Returns the evolution of the tracked value for a specified validity instant.
+	 * The evolution informs you about how knowledge about the value valid at a certain instant evolved.
 	 */
-	public Collection<Bitemporal> getEvolution(Instant validOn) {
+	public List<Bitemporal> getEvolution(Instant validOn) {
 		return data.stream()
 				.filter(bt -> bt.getValidityInterval().contains(validOn))
 				.collect(toCollection(LinkedList::new));
@@ -88,33 +90,27 @@ public class BitemporalTrace implements Serializable {
 	public void add(Bitemporal newValue) {
 		sanityCheck();
 
-		Collection<Bitemporal> toEnd = new HashSet<>();
+		Collection<Bitemporal> toEnd = getHistory(now())
+				.stream()
+				.filter(bt -> newValue.getValidityInterval().overlaps(bt.getValidityInterval()))
+				.collect(toList());
+
 		Collection<Bitemporal> toAdd = new LinkedList<>();
 
-		for (Bitemporal possibleOverlap : getHistory(TimeUtils.now())) {
-			if (newValue.getValidityInterval().overlaps(possibleOverlap.getValidityInterval())) {
-				toEnd.add(possibleOverlap);
-			}
-		}
-
 		Instant validityStartOfNewValue = newValue.getValidityInterval().getStart();
-		for (Bitemporal validOnStartOfNewValue : get(validityStartOfNewValue, TimeUtils.now())) {
-			if (validityStartOfNewValue.compareTo(validOnStartOfNewValue.getValidityInterval().getStart()) > 0) {
-				Interval validityInterval = TimeUtils.interval(validOnStartOfNewValue.getValidityInterval().getStart(),
-						validityStartOfNewValue);
-				toAdd.add(validOnStartOfNewValue.copyWith(validityInterval));
-			}
-		}
+		toAdd.addAll(get(validityStartOfNewValue, now())
+				.stream()
+				.filter(bt -> validityStartOfNewValue.compareTo(bt.getValidityInterval().getStart()) > 0)
+				.map(bt -> bt.copyWith(interval(bt.getValidityInterval().getStart(), validityStartOfNewValue)))
+				.collect(toList()));
 
-		if (!newValue.getValidityInterval().getEnd().equals(endOfTime())) {
+		if (!newValue.getValidityInterval().getEnd().equals(END_OF_TIME)) {
 			Instant validityEndOfNewValue = newValue.getValidityInterval().getEnd();
-			for (Bitemporal validOnEndOfNewValue : get(validityEndOfNewValue, TimeUtils.now())) {
-				if (validityEndOfNewValue.compareTo(validOnEndOfNewValue.getValidityInterval().getStart()) > 0) {
-					Interval validityInterval = TimeUtils.interval(validityEndOfNewValue, validOnEndOfNewValue
-							.getValidityInterval().getEnd());
-					toAdd.add(validOnEndOfNewValue.copyWith(validityInterval));
-				}
-			}
+			toAdd.addAll(get(validityEndOfNewValue, now())
+					.stream()
+					.filter(bt -> validityEndOfNewValue.compareTo(bt.getValidityInterval().getStart()) > 0)
+					.map(bt -> bt.copyWith(interval(validityEndOfNewValue, bt.getValidityInterval().getEnd())))
+					.collect(toList()));
 		}
 
 		toEnd.forEach(bt -> bt.end());
@@ -134,7 +130,7 @@ public class BitemporalTrace implements Serializable {
 	 * Make sure we're not in the past relative to the recording intervals in the trace.
 	 */
 	private void sanityCheck() throws IllegalStateException {
-		if (data.stream().anyMatch(bt -> bt.getRecordInterval().getStart().isAfter(TimeUtils.now()))) {
+		if (data.stream().anyMatch(bt -> bt.getRecordInterval().getStart().isAfter(now()))) {
 			throw new IllegalStateException("Cannot manipulate bitemporal trace; trace contains data from the future");
 		}
 	}

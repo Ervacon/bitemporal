@@ -13,10 +13,10 @@ import org.threeten.extra.Interval;
  * 	<li>Recording time: indicates when the value was known</li>
  * </ol>
  * <p>
- * Tracking information bitemporally allows you to aswer questions along the lines of "On january second 1999, what
- * did we think the valid value was for september first 1980.".
+ * Tracking information bitemporally allows you to answer questions along the lines of "On January second 1999, what
+ * did we think the valid value was for September first 1980?".
  * <p>
- * In most cases, application level could should not directly implement this interface, but should instead
+ * In most cases, application level code should not directly implement this interface, but should instead
  * wrap existing value classes bitemporally using a {@link BitemporalWrapper}.
  *
  * @see BitemporalTrace
@@ -37,7 +37,7 @@ public interface Bitemporal {
 	public Interval getRecordInterval();
 
 	/**
-	 * End the recording interval of this bitemporal object, indicating that it has been superceded by a new object,
+	 * End the recording interval of this bitemporal object. This indicates that it has been superceded by a new object,
 	 * or is deemed as no longer relevant (i.e. because it was faulty knowledge) and should be 'forgotten'.
 	 */
 	public void end();
