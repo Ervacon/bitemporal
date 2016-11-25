@@ -9,11 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
-import java.util.Date;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.InstantType;
-import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 import org.hibernate.usertype.CompositeUserType;
 import org.threeten.extra.Interval;
@@ -26,7 +24,7 @@ import org.threeten.extra.Interval;
 public class PersistentInterval implements CompositeUserType {
 
 	private static final String[] PROPERTY_NAMES = {"start", "end"};
-	private static final Type[] TYPES = {StandardBasicTypes.TIMESTAMP, StandardBasicTypes.TIMESTAMP};
+	private static final Type[] TYPES = {InstantType.INSTANCE, InstantType.INSTANCE};
 
 	@Override
 	public String[] getPropertyNames() {
@@ -41,12 +39,12 @@ public class PersistentInterval implements CompositeUserType {
 	@Override
 	public Object getPropertyValue(Object component, int property) throws HibernateException {
 		Interval interval = (Interval) component;
-		return (property == 0) ? Date.from(interval.getStart()) : Date.from(interval.getEnd());
+		return (property == 0) ? interval.getStart() : interval.getEnd();
 	}
 
 	@Override
 	public void setPropertyValue(Object component, int property, Object value) throws HibernateException {
-		throw new UnsupportedOperationException("Immutable Interval");
+		throw new UnsupportedOperationException("Interval is immutable");
 	}
 
 	@Override

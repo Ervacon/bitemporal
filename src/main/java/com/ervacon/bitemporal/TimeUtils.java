@@ -21,8 +21,8 @@ public final class TimeUtils {
 	/**
 	 * Instant representing the end of time.
 	 * <p>
-	 * Note that this does not use {@link Instant#MAX} because that causes issues when converting to and from
-	 * {@link Date}s. Furthermore, some databases put extra limits on the maximum timestamp that can be stored.
+	 * Note that this does not use {@link Instant#MAX} because most databases put limits on the maximum timestamp that
+	 * can be stored.
 	 */
 	public static final Instant END_OF_TIME = Instant.ofEpochMilli(32503676400000L); // 1/1/3000; adapt for your needs
 
