@@ -8,11 +8,11 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.type.InstantType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 import org.hibernate.usertype.CompositeUserType;
@@ -76,8 +76,9 @@ public class PersistentInterval implements CompositeUserType {
 		if (resultSet == null) {
 			return null;
 		}
-		Instant start = asInstant(StandardBasicTypes.TIMESTAMP.nullSafeGet(resultSet, names[0], session));
-		Instant end = asInstant(StandardBasicTypes.TIMESTAMP.nullSafeGet(resultSet, names[1], session));
+
+		Instant start = InstantType.INSTANCE.nullSafeGet(resultSet, names[0], session);
+		Instant end = InstantType.INSTANCE.nullSafeGet(resultSet, names[1], session);
 		if (start == null || end == null) {
 			return null;
 		}
@@ -87,14 +88,11 @@ public class PersistentInterval implements CompositeUserType {
 	@Override
 	public void nullSafeSet(PreparedStatement statement, Object value, int index, SessionImplementor session)
 			throws HibernateException, SQLException {
-		if (value == null) {
-			statement.setNull(index, StandardBasicTypes.TIMESTAMP.sqlType());
-			statement.setNull(index + 1, StandardBasicTypes.TIMESTAMP.sqlType());
-			return;
-		}
-		Interval interval = (Interval) value;
-		statement.setTimestamp(index, asTimeStamp(interval.getStart()));
-		statement.setTimestamp(index + 1, asTimeStamp(interval.getEnd()));
+		Instant start = value != null ? ((Interval) value).getStart() : null;
+		Instant end = value != null ? ((Interval) value).getEnd() : null;
+
+		InstantType.INSTANCE.nullSafeSet(statement, start, index, session);
+		InstantType.INSTANCE.nullSafeSet(statement, end, index + 1, session);
 	}
 
 	@Override
@@ -121,13 +119,5 @@ public class PersistentInterval implements CompositeUserType {
 	public Object replace(Object original, Object target, SessionImplementor session, Object owner)
 			throws HibernateException {
 		return original;
-	}
-
-	private Timestamp asTimeStamp(Instant time) {
-		return new Timestamp(time.toEpochMilli());
-	}
-
-	private Instant asInstant(Date date) {
-		return Instant.ofEpochMilli(date.getTime());
 	}
 }
