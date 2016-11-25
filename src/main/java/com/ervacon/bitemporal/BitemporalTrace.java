@@ -7,6 +7,7 @@ package com.ervacon.bitemporal;
 import static com.ervacon.bitemporal.TimeUtils.END_OF_TIME;
 import static com.ervacon.bitemporal.TimeUtils.interval;
 import static com.ervacon.bitemporal.TimeUtils.now;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
@@ -35,16 +36,13 @@ import java.util.List;
  */
 public class BitemporalTrace implements Serializable {
 
-	private Collection<Bitemporal> data;
+	private final Collection<Bitemporal> data;
 
 	/**
 	 * Create a new bitemporal trace working on top of given data collection.
 	 */
 	public BitemporalTrace(Collection<Bitemporal> data) {
-		if (data == null) {
-			throw new IllegalArgumentException("The bitemporal data is required");
-		}
-		this.data = data;
+		this.data = requireNonNull(data, "The bitemporal data is required");
 	}
 
 	/**

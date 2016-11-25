@@ -5,6 +5,7 @@
 package com.ervacon.bitemporal;
 
 import static com.ervacon.bitemporal.TimeUtils.fromNow;
+import static java.util.Objects.requireNonNull;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -40,14 +41,8 @@ public class BitemporalProperty<V, T extends Bitemporal> implements Serializable
 	 * Create a new bitemporal property wrapping given trace and using given value accessor.
 	 */
 	public BitemporalProperty(BitemporalTrace trace, ValueAccessor<V, T> accessor) {
-		if (trace == null) {
-			throw new IllegalArgumentException("The bitemporal trace is required");
-		}
-		if (accessor == null) {
-			throw new IllegalArgumentException("The value accessor is required");
-		}
-		this.trace = trace;
-		this.accessor = accessor;
+		this.trace = requireNonNull(trace, "The bitemporal trace is required");
+		this.accessor = requireNonNull(accessor, "The value accessor is required");
 	}
 
 	/**
