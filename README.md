@@ -6,12 +6,12 @@ A simple and elegant approach to dealing with bitemporal issues in rich domain m
 # Introduction
 
 The code in this project provides a simple and elegant approach to dealing with bitemporal issues
-in rich domain models. While the user (application) level API is fluent and straight forward, it
+in rich domain models. While the user (application) level API is fluent and straightforward, it
 also provides you with full access to temporal information when required. Furthermore, you can still
 persist your core domain objects, and their bitemporal properties using a capable ORM product such
 as Hibernate.
 
-At this moment, this code is not part of a real project, and as such it is not activly worked on or
+At this moment, this code is not part of a real project, and as such it is not actively worked on or
 developed. Still, it provides a good starting point for those that need to tackle temporal issues
 in their applications.
 
@@ -23,7 +23,7 @@ to: bitemporal@ervacon.com.
 Java 8 (JDK 1.8) or later is required to build and use the code in this project. ThreeTen Extra
 (http://www.threeten.org/threeten-extra/) is used internally, and is the only external dependency.
 
-A Java 5 compatible version is available in the bitemporal-java5 branch.
+Note that a Java 5 compatible version is available in the bitemporal-java5 branch.
 
 The project is packaged as a simple Maven project (http://maven.apache.org/). Simply executing 'mvn package'
 in the project directory will build the project and package it as a jar file.
